@@ -1,0 +1,706 @@
+1.index.html
+------------
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Books Cart</title> 
+        <style>
+            form{
+                background-image:linear-gradient(red,green,blue);
+            }
+        </style>
+    </head>   
+    <body>
+        <div align="center">
+            <form method="post" action="MainServlet">
+                 <h1>WELCOME TO BOOK SHOPPING</h1>
+                <select name="book">
+                    <option value="c">C</option>
+                    <option value="cpp">C++</option>
+                    <option value="java">Java</option>
+                    <option value="python">Python</option>
+                </select><br/><br/>
+                 <input type="submit"/>
+            </form>
+        </div>
+    </body>
+</html>
+2.MainServlet.java
+------------------
+
+package Mypac;
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+
+public class MainServlet extends HttpServlet {
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+         resp.setContentType("text/html");
+         PrintWriter pw=resp.getWriter();
+         String sbook=req.getParameter("book");
+         Cookie c=new Cookie("bookname",sbook);
+         resp.addCookie(c);
+         ServletContext sc=getServletContext();
+         sc.setAttribute("bname",sbook);
+         resp.sendRedirect("CookieServlet");
+    }
+
+}
+3.CookieServlet.java
+--------------------
+
+package Mypac;
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+
+public class CookieServlet extends HttpServlet {
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+         resp.setContentType("text/html");
+         PrintWriter pw=resp.getWriter();
+         Cookie mycks[]=req.getCookies();
+         String bname=null;
+         ServletContext sc=getServletContext();
+         bname=(String)sc.getAttribute("bname");
+         for(Cookie c:mycks){
+             if(c.getName().equals("bname")){
+                bname=c.getValue();
+            }
+            
+         }
+          RequestDispatcher rd=req.getRequestDispatcher(bname+".html");
+             rd.include(req, resp);
+         pw.print("<h1 align=center style=color:green>Select more than one book to get 25% discount</h1>");
+    }
+
+}
+4.c.html
+--------
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>C Programming</title>
+        <style>
+            body{
+                text-align: center;
+                background-color: black;
+            }
+            h2{
+                background-color:limegreen;
+                text-align: center;
+                font-family: Algerian;
+                border:orangered groove thick;
+            }
+            a{
+                background-color:darksalmon;
+            }
+            table{
+                background-color:mediumspringgreen;
+                text-align: center;
+                
+            }
+            fieldset{
+                background-color:blueviolet; 
+            }
+        </style>
+    </head>
+    <body>
+        <div align="center">
+            <fieldset>
+                <h2> C Programming Books</h2>
+                 <form method="post" action="AddToCartServlet">
+                <table border="1" align="center">
+                    <tr>
+                        <th>Sno</th>
+                        <th>Book Name</th>
+                        <th>Book Author</th>
+                        <th>Book Price</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="checkbox" name="cb" 
+                        value="26 C programming language 399"/>C Programming Language</td>
+                        <td>Dennis Ritchie</td>
+                        <td>399</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><input type="checkbox" name="cb" 
+                        value="24 Programming in ASCII 499"/>Programming in ASCII</td>
+                        <td>BalaguruSwamy</td>
+                        <td>499</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="checkbox" name="cb" 
+                        value="12 Modern C 599"/>Modern C</td>
+                        <td>Jens Gustedt</td>
+                        <td>599</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2"><button><a href="index.html">back</a></button></th>
+                        <th colspan="2"><button type="submit">next</button></th>
+                    </tr>
+                </table>
+            </form>
+            </fieldset>
+           
+        </div>
+    </body>
+</html>
+5.cpp.html
+----------
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>C Programming</title>
+         <style>
+            body{
+                text-align: center;
+                background-color: black;
+            }
+            h2{
+                background-color:limegreen;
+                text-align: center;
+                font-family: Algerian;
+                border:orangered groove thick;
+            }
+            a{
+                background-color:darksalmon;
+            }
+            table{
+                background-color:mediumspringgreen;
+                text-align: center;
+                
+            }
+            fieldset{
+                background-color:blueviolet; 
+            }
+        </style>
+    </head>
+    <body>
+        <div align="center">
+            <fieldset>
+                <h2>C++ Programming Books</h2>
+                <form method="post" action="AddToCartServlet">
+                <table border="1" align="center">
+                    <tr>
+                        <th>Sno</th>
+                        <th>Book Name</th>
+                        <th>Book Author</th>
+                        <th>Book Price</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="checkbox" name="cb" 
+                        value="28 C++ programming language 399"/>C++ programming language</td>
+                        <td>Bjarne Stroustrup</td>
+                        <td>399</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><input type="checkbox" name="cb" 
+                        value="14 Modern C++ 499"/>Modern C++</td>
+                        <td>Scott Meyers</td>
+                        <td>499</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="checkbox" name="cb" 
+                        value="14 C++ Primer 599"/>C++ Primer</td>
+                        <td>Stanley</td>
+                        <td>599</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2"><button><a href="index.html">back</a></button></th>
+                        <th colspan="2"><button type="submit">next</button></th>
+                    </tr>
+                </table>
+            </form>
+            </fieldset>
+        </div>
+    </body>
+</html>
+6.java.html
+-----------
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>C Programming</title>
+         <style>
+            body{
+                text-align: center;
+                background-color: black;
+            }
+            h2{
+                background-color:limegreen;
+                text-align: center;
+                font-family: Algerian;
+                border:orangered groove thick;
+            }
+            a{
+                background-color:darksalmon;
+            }
+            table{
+                background-color:mediumspringgreen;
+                text-align: center;
+                
+            }
+            fieldset{
+                background-color:blueviolet; 
+            }
+        </style>
+    </head>
+    <body>
+        <div align="center">
+            <fieldset>
+                <h2>Java Programming Books</h2>
+                 <form method="post" action="AddToCartServlet">
+                <table border="1" align="center">
+                    <tr>
+                        <th>Sno</th>
+                        <th>Book Name</th>
+                        <th>Book Author</th>
+                        <th>Book Price</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="checkbox" name="cb" 
+                        value="26 The Complete Reference 399"/>The Complete Reference</td>
+                        <td>Herbert Schildt</td>
+                        <td>399</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><input type="checkbox" name="cb" 
+                        value="13 Core Java 499"/>Core Java </td>
+                        <td>Dr. Nageswara Rao</td>
+                        <td>499</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="checkbox" name="cb" 
+                        value="19 Head First Java 599"/>Head First Java</td>
+                        <td>Kathy Sierra and Bert Bates</td>
+                        <td>599</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2"><button><a href="index.html">back</a></button></th>
+                        <th colspan="2"><button type="submit">next</button></th>
+                    </tr>
+                </table>
+            </form>
+            </fieldset>
+           
+        </div>
+    </body>
+</html>
+7.python.html
+-------------
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>C Programming</title>
+        <style>
+            body{
+                text-align: center;
+                background-color: black;
+            }
+            h2{
+                background-color:limegreen;
+                text-align: center;
+                font-family: Algerian;
+                border:orangered groove thick;
+            }
+            a{
+                background-color:darksalmon;
+            }
+            table{
+                background-color:mediumspringgreen;
+                text-align: center;
+                
+            }
+            fieldset{
+                background-color:blueviolet; 
+            }
+        </style>
+    </head>
+    <body>
+        <div align="center">
+            <fieldset>
+                <h2> Python Programming Books</h2>
+                <form method="post" action="AddToCartServlet">
+                <table border="1" align="center">
+                    <tr>
+                        <th>Sno</th>
+                        <th>Book Name</th>
+                        <th>Book Author</th>
+                        <th>Book Price</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="checkbox" name="cb" 
+                        value="23 Python Crash Course 399"/>Python Crash Course</td>
+                        <td>Dennis Ritchie</td>
+                        <td>399</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><input type="checkbox" name="cb" 
+                        value="21 Head First Python 499"/>Head First Python</td>
+                        <td>BalaguruSwamy</td>
+                        <td>499</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="checkbox" name="cb" 
+                        value="22 Python Programming 599"/>Python Programming</td>
+                        <td>Jens Gustedt</td>
+                        <td>599</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2"><button><a href="index.html">back</a></button></th>
+                        <th colspan="2"><button type="submit">next</button></th>
+                    </tr>
+                </table>
+            </form>
+        </div>
+            </fieldset>
+        </div>
+    </body>
+</html>
+8.AddToCartServlet.java
+-----------------------
+
+package Mypac;
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+
+public class AddToCartServlet extends HttpServlet {
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+       resp.setContentType("text/html");
+       PrintWriter pw=resp.getWriter();
+       ServletContext sc=getServletContext();
+       int bcount=0,bprice=0,bfinal_price=0;
+       String btitle;
+        String books[]=req.getParameterValues("cb");
+        String bt[]=new String[books.length];
+           int bp[]=new int[books.length];
+           pw.print("<div>");
+           pw.print("<body style= background-color:black>");
+           pw.print("<h2 style=color:red align=center>Here are your Cart Details Please Check Once And Proceed</h2>");
+           pw.print("<table border=1 align=center style= background-color:mediumspringgreen text-align:center>");
+           pw.print("<tr>");
+           pw.print("<th>Sno</th>");
+           pw.print("<th>Book Name</th>");
+           pw.print("<th>Book Price</th>");
+           pw.print("</tr>");
+      try{ if(req.getParameterValues("cb")!=null){
+           for(int i=0;i<books.length;i++){
+               int len=Integer.parseInt(books[i].substring(0,2));
+               btitle=books[i].substring(2,len-1);
+               bt[i]=btitle;
+               bprice=Integer.parseInt(books[i].substring(len,books[i].length()));
+               bp[i]=bprice;
+           }
+       }
+       else{
+           String bname="";
+           RequestDispatcher rd=req.getRequestDispatcher((String) sc.getAttribute(bname+".html"));
+           rd.include(req, resp);
+       }}catch(Exception e){
+           System.out.println("Exception ");
+       }
+       for(int i=0;i<books.length;i++){
+           
+           pw.print("<tr>");
+           pw.print("<th>"+(i+1)+"</th>");
+           pw.print("<th>"+bt[i]+"</th>");
+           pw.print("<th>"+bp[i]+"</th>");
+           pw.print("</tr>");
+          
+           bfinal_price=bfinal_price+bp[i];
+           bcount=bcount+1;
+       }
+       pw.print("<tr>");
+       pw.print("<th>");
+        pw.print("<button><a href=index.html>back</a></button>");
+        pw.print("</th>");
+       
+        
+        pw.print("<th>");
+        pw.print("---Cart Details---");
+         pw.print("</th>");
+         
+        
+        pw.print("<th>");
+        pw.print("<button><a href=PaymentGateway.html>proceed</a></button>");
+         pw.print("</th>");
+        pw.print("</tr>");
+        pw.print("</table>");
+        pw.print("</body>");
+        pw.print("</div>");
+        if(bcount>1){
+            bfinal_price=(int)(bfinal_price-(bfinal_price*0.25));
+        }
+        else{
+            pw.print("<h1 align=center style=color:red>You Missed The Offer</h1>");
+        }
+        pw.print("<h1 align=center style=color:hotpink>Cart Amount:"+bfinal_price+"</h1>");
+        sc.setAttribute("final_amount",bfinal_price);
+    }
+
+    
+}
+9.PaymentGateway.html
+---------------------
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Payment Gateway</title>
+         <style>
+            body{
+                text-align: center;
+                background-color: black;
+            }
+            h2{
+                background-color:limegreen;
+                text-align: center;
+                font-family: Algerian;
+                border:orangered groove thick;
+            }
+            table{
+                background-color:mediumspringgreen;
+                text-align: center;
+                
+            }
+            fieldset{
+                background-color:blueviolet; 
+            }
+        </style>
+    </head>
+    <body>
+        <div align="center">
+            <fieldset>
+                <h2>Enter Your Credit Card Details</h2>
+                 <form method="post" action="PaymentConfirmationServlet1">
+                <table border="1" align="center">
+                    <tr>
+                        <th>Name</th>
+                        <td> <input type="text" name="a"/></td>
+                    </tr>
+                    <tr>
+                        <th>CVV</th>
+                        <td><input type="text" name="b"/></td>
+                    </tr>
+                    <tr>
+                        <th>CardNo</th>
+                        <td><input type="text" maxlength="16" name="d"/></td>
+                    </tr>
+                    <tr>
+                        <th>Password</th>
+                        <td><input type="password" name="c"/></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2"><input type="submit" value="Proceed"/></th>
+                    </tr>
+                </table>
+               
+            </form>
+            </fieldset>
+           
+        </div>
+    </body>
+</html>
+10.PaymentConfirmationServlet.java
+----------------------------------
+
+package Mypac;
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+
+public class PaymentConfirmationServlet1 extends HttpServlet {
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+         resp.setContentType("text/html");
+         PrintWriter pw=resp.getWriter();
+         ServletContext sc=getServletContext();
+          int Amount= (int) sc.getAttribute("final_amount");
+          String name,cvv,psd,cno;
+           
+         HttpSession hs=req.getSession(true);
+         hs.setMaxInactiveInterval(60);
+        
+         if(Amount!=0){
+            name=req.getParameter("a");
+            cvv=req.getParameter("b");
+            psd=req.getParameter("c");
+            cno=req.getParameter("d");
+            sc.setAttribute("name", name);
+             sc.setAttribute("cvv", cvv);
+              sc.setAttribute("cno", cno);
+               sc.setAttribute("psd", psd);
+            pw.print("<div>");
+            pw.print("<body style= background-color:black>");
+            pw.print("<h2 style=color:red align=center>Here are your Credit Card Details Please Check Once And Proceed</h2>");
+            pw.print("<table border=1 align=center style= background-color:mediumspringgreen text-align:center>");
+            pw.print("<tr>");
+            pw.print("<th>");
+            pw.print("Name");
+            pw.print("</th>");
+            pw.print("<th>");
+            pw.print(name);
+            pw.print("</th>");
+            pw.print("</tr>");
+            pw.print("<tr>");
+            pw.print("<th>");
+            pw.print("CVV");
+            pw.print("</th>");
+            pw.print("<th>");
+            pw.print(cvv);
+            pw.print("</th>");
+            pw.print("</tr>");
+            pw.print("<tr>");
+            pw.print("<th>");
+            pw.print("Card No");
+            pw.print("</th>");
+            pw.print("<th>");
+            pw.print(cno);
+            pw.print("</th>");
+            pw.print("</tr>");
+            pw.print("<tr>");
+            pw.print("<th colspan=2>");
+        pw.print("<button><a href=PaymentServlet>proceed</a></button>");
+         pw.print("</th>");
+          pw.print("</tr>");
+            pw.print("</table>");
+            pw.print("</body>");
+            pw.print("</div>");
+         }
+         else{
+             RequestDispatcher rd=req.getRequestDispatcher("PaymentGateway.html");
+             rd.forward(req, resp);
+         }
+    }   
+}
+11.PaymentServlet.java
+----------------------
+
+package Mypac;
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.sql.*;
+import java.util.Random;
+public class PaymentServlet extends HttpServlet {
+    ResultSet rs;
+    Statement stmt;
+      Connection con;
+    @Override
+    public void init() throws ServletException {
+        try{
+         Class.forName("org.apache.derby.jdbc.ClientDriver");
+        con=DriverManager.getConnection("jdbc:derby://localhost:1527/cd");
+         }catch(Exception e){
+                 System.out.println("Exception Handled");
+                 }
+    }
+    
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+         resp.setContentType("text/html");
+         PrintWriter pw=resp.getWriter();
+         ServletContext sc=getServletContext();
+         String name,cvv,psd,s1,cno;
+          int price;
+         HttpSession hs=req.getSession(false);
+         if(hs==null){
+             pw.print("<h1 align=center style=color:red>Time out..Please try another time</h1>");
+             pw.print("<h1 align=center style=color:blue>Click the below link to go to home page</h1>");
+             pw.print("<h1 align=center style=color:green><button><a href=index.html>back</a></button></h1>");
+         }
+         else{  
+             name=(String) sc.getAttribute("name");
+             cvv=(String) sc.getAttribute("cvv");
+             cno= (String) sc.getAttribute("cno");
+             psd=(String) sc.getAttribute("psd");
+             price=(int) sc.getAttribute("final_amount");
+             String s="select * from cart";
+             try{ 
+                 stmt=con.createStatement();
+                 rs=stmt.executeQuery(s);
+                 if(rs!=null){
+                        while(rs.next()){
+                            if(rs.getString("cno").equals(cno)){
+                                if(rs.getString("cvv").equals(cvv) && rs.getString("psd").equals(psd)){
+                                    if(rs.getInt(5)>=price){
+                                        //pw.print(rs.getInt(5));
+                                        //pw.print(price);
+                                        int bal=rs.getInt(5);
+                                       // bal=bal-price;
+                                        //pw.print(bal);
+                                        stmt.executeUpdate("update cart set bal="+(bal-price) );
+                                        Random r=new Random();
+                                        pw.print("<h2 align=center style=color:green>Your Transaction Successfully Processed...!!!</h2>");
+                                        pw.print("<h2 align=center style=color:green>You can refer by following this id:"+Math.abs(r.nextInt(1000000000)));
+                                         pw.print("<h1 align=center style=color:blue>Click the below link to go to home page</h1>");
+                                         pw.print("<h1 align=center style=color:green><a href=index.html>back</a></h1>");
+                                    
+                                    }
+                                    else{
+                                         pw.print("<h1 align=center style=color:red>Insufficient Balance</h1>");
+                                         pw.print("<h1 align=center style=color:blue>Click the below link to go to home page</h1>");
+                                         pw.print("<h1 align=center style=color:green><a href=index.html>back</a></h1>");
+                                    }
+                                }
+                                else{
+                                 pw.print("<h1 align=center style=color:red>Invalid CVV or Password</h1>");
+                                 pw.print("<h1 align=center style=color:blue>Click the below link to go to Payment Details</h1>");
+                                 pw.print("<h1 align=center style=color:green><a href=PaymentGateway.html>back</a</h1>");
+                            }
+                            }
+                            
+                            else{
+                                 pw.print("<h1 align=center style=color:red>Invalid Card number</h1>");
+                                 pw.print("<h1 align=center style=color:blue>Click the below link to go to home page</h1>");
+                                 pw.print("<h1 align=center style=color:green><a href=index.html>back</a></h1>");
+                            }
+                       }          
+                 }}catch(Exception e){
+                 System.out.println("Exception handled");
+                 }
+                
+             }
+         }
+    }   
+            
+
+    
+
+    
+    
+
